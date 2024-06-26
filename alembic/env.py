@@ -108,5 +108,6 @@ def run_migrations_online():
 if context.is_offline_mode():
     run_migrations_offline()
 else:
-    # Ensure this is called within an async context
-    run_migrations_online()
+    asyncio.run(run_async_migrations_online())
+    # # Ensure this is called within an async context
+    # run_migrations_online()
