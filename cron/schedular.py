@@ -7,18 +7,17 @@ from typing import List
 import httpx
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
+from events_app.core.config import get_config
+from events_app.database_manager.base import engine_kw
+from events_app.database_manager.base import get_db_url
+from events_app.database_manager.schemas import EventSchema
+from events_app.database_manager.session_manager.db_session import Database
+from events_app.pyd_models.events import PostEventModel
+from events_app.utils.constants import ConfigFile
 from lxml import etree
 from sqlalchemy import select
 from sqlalchemy import tuple_
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.core.config import get_config
-from app.database_manager.base import engine_kw
-from app.database_manager.base import get_db_url
-from app.database_manager.schemas import EventSchema
-from app.database_manager.session_manager.db_session import Database
-from app.pyd_models.events import PostEventModel
-from app.utils.constants import ConfigFile
 
 
 logging.basicConfig(level=logging.INFO)

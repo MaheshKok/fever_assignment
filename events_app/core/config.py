@@ -6,8 +6,7 @@ import os
 import pathlib
 
 import tomli as toml
-
-from app.utils.constants import ConfigFile
+from events_app.utils.constants import ConfigFile
 
 
 class Config:

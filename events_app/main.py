@@ -6,9 +6,8 @@ import pathlib
 import sys
 
 import uvicorn
-
-from app.create_app import get_app
-from app.utils.constants import ConfigFile
+from events_app.create_app import get_app
+from events_app.utils.constants import ConfigFile
 
 
 logging.basicConfig(

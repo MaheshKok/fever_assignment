@@ -5,9 +5,8 @@ import pathlib
 import asyncpg
 from alembic import command
 from alembic.config import Config as AlembicConfig
+from events_app.core.config import Config
 from sqlalchemy.engine.url import URL
-
-from app.core.config import Config
 
 
 engine_kw = {

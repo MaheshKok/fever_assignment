@@ -3,19 +3,18 @@ import logging
 from datetime import datetime
 
 import aioredis
+from events_app.database_manager.session_manager.db_session import Database
+from events_app.pyd_models.events import ErrorModel
+from events_app.pyd_models.events import EventModel
+from events_app.pyd_models.events import ResponseEventModel
+from events_app.pyd_models.events import StandardResponseModel
+from events_app.routers.dependency import get_async_redis_client
+from events_app.routers.utils import get_events_from_db
+from events_app.routers.utils import get_events_from_redis
+from events_app.routers.utils import set_events_in_redis
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import Query
-
-from app.database_manager.session_manager.db_session import Database
-from app.pyd_models.events import ErrorModel
-from app.pyd_models.events import EventModel
-from app.pyd_models.events import ResponseEventModel
-from app.pyd_models.events import StandardResponseModel
-from app.routers.dependency import get_async_redis_client
-from app.routers.utils import get_events_from_db
-from app.routers.utils import get_events_from_redis
-from app.routers.utils import set_events_in_redis
 
 
 # Configure logging

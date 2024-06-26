@@ -6,14 +6,13 @@ from typing import Dict
 from typing import Optional
 from typing import Union
 
+from events_app.database_manager.session_manager.db_session import Database
 from sqlalchemy import URL
 from sqlalchemy import Engine
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.base import RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.types import ASGIApp
-
-from app.database_manager.session_manager.db_session import Database
 
 
 # havent tested yet

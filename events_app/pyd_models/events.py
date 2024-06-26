@@ -3,11 +3,10 @@ from datetime import datetime
 from datetime import time
 from typing import List
 
+from events_app.database_manager.schemas import EventSchema
 from pydantic import UUID4
 from pydantic import BaseModel
 from pydantic import model_validator
-
-from app.database_manager.schemas import EventSchema
 
 
 class EventModel(BaseModel):

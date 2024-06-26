@@ -1,7 +1,6 @@
 import aioredis
-
-from app.core.config import Config
-from app.utils.constants import REDIS
+from events_app.core.config import Config
+from events_app.utils.constants import REDIS
 
 
 def get_redis_client(config: Config) -> aioredis.StrictRedis:

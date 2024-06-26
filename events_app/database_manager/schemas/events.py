@@ -1,5 +1,6 @@
 import uuid
 
+from events_app.database_manager import Base
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 from sqlalchemy import Float
@@ -7,8 +8,6 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
-
-from app.database_manager import Base
 
 
 class EventSchema(Base):

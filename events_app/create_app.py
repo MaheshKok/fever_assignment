@@ -3,20 +3,19 @@ from contextlib import asynccontextmanager
 
 import sentry_sdk
 from cron.schedular import start_scheduler
+from events_app.caching.base import get_redis_client
+
+# from events_app.api.healthcheck import healthcheck_router
+from events_app.core.config import Config
+from events_app.core.config import get_config
+from events_app.database_manager.base import create_database
+from events_app.database_manager.base import engine_kw
+from events_app.database_manager.base import get_db_url
+from events_app.database_manager.session_manager.db_session import Database
+from events_app.routers.events import events_router
+from events_app.routers.healthcheck import health_router
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-
-from app.caching.base import get_redis_client
-
-# from app.api.healthcheck import healthcheck_router
-from app.core.config import Config
-from app.core.config import get_config
-from app.database_manager.base import create_database
-from app.database_manager.base import engine_kw
-from app.database_manager.base import get_db_url
-from app.database_manager.session_manager.db_session import Database
-from app.routers.events import events_router
-from app.routers.healthcheck import health_router
 
 
 logging.basicConfig(
@@ -74,7 +73,7 @@ async def lifespan(app):
     logging.info("Application startup")
     await create_database(app.state.config)
     # TODO: apply_migration not working
-    # run_apply_migration(app.state.config)
+    # run_apply_migration(events_app.state.config)
 
     async_db_url = get_db_url(app.state.config)
     Database.init(async_db_url, engine_kw=engine_kw)

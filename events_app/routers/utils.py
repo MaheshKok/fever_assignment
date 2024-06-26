@@ -4,11 +4,10 @@ from datetime import datetime
 from typing import List
 
 import aioredis
+from events_app.database_manager.schemas import EventSchema
+from events_app.pyd_models.events import EventModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.database_manager.schemas import EventSchema
-from app.pyd_models.events import EventModel
 
 
 logging.basicConfig(level=logging.INFO)
