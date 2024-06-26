@@ -7,15 +7,15 @@ from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import Query
 
-from app.database.session_manager.db_session import Database
-from app.endpoints.dependency import get_async_redis_client
-from app.endpoints.utils import get_events_from_db
-from app.endpoints.utils import get_events_from_redis
-from app.endpoints.utils import set_events_in_redis
-from app.pydantic_models.events import ErrorModel
-from app.pydantic_models.events import EventModel
-from app.pydantic_models.events import ResponseEventModel
-from app.pydantic_models.events import StandardResponseModel
+from app.database_manager.session_manager.db_session import Database
+from app.pyd_models.events import ErrorModel
+from app.pyd_models.events import EventModel
+from app.pyd_models.events import ResponseEventModel
+from app.pyd_models.events import StandardResponseModel
+from app.routers.dependency import get_async_redis_client
+from app.routers.utils import get_events_from_db
+from app.routers.utils import get_events_from_redis
+from app.routers.utils import set_events_in_redis
 
 
 # Configure logging
@@ -40,7 +40,7 @@ async def get_events(
 ) -> StandardResponseModel:
     """
     Retrieve a list of events filtered by start and end date.
-    Cache results in Redis and queries the database if cache miss occurs.
+    Cache results in Redis and queries the database_manager if cache miss occurs.
     """
     if ends_at <= starts_at:
         error_msg = "End date must be greater than start date"
@@ -56,7 +56,7 @@ async def get_events(
             event_models = [EventModel.parse_raw(event) for event in redis_events]
             return StandardResponseModel(data=ResponseEventModel(events=event_models))
 
-        logger.info("Cache miss querying database.")
+        logger.info("Cache miss querying database_manager.")
         async with Database() as async_session:
             event_schemas = await get_events_from_db(starts_at, ends_at, async_session)
             if event_schemas:

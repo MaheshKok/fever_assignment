@@ -7,7 +7,7 @@ from pydantic import UUID4
 from pydantic import BaseModel
 from pydantic import model_validator
 
-from app.database.schemas import EventSchema
+from app.database_manager.schemas import EventSchema
 
 
 class EventModel(BaseModel):

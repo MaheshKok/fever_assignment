@@ -8,7 +8,7 @@ from sqlalchemy import String
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 
-from app.database import Base
+from app.database_manager import Base
 
 
 class EventSchema(Base):

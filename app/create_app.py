@@ -6,16 +6,17 @@ from cron.schedular import start_scheduler
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
+from app.caching.base import get_redis_client
+
 # from app.api.healthcheck import healthcheck_router
 from app.core.config import Config
 from app.core.config import get_config
-from app.database.base import create_database
-from app.database.base import engine_kw
-from app.database.base import get_db_url
-from app.database.base import get_redis_client
-from app.database.session_manager.db_session import Database
-from app.endpoints.events import events_router
-from app.endpoints.healthcheck import health_router
+from app.database_manager.base import create_database
+from app.database_manager.base import engine_kw
+from app.database_manager.base import get_db_url
+from app.database_manager.session_manager.db_session import Database
+from app.routers.events import events_router
+from app.routers.healthcheck import health_router
 
 
 logging.basicConfig(
@@ -74,9 +75,10 @@ async def lifespan(app):
     await create_database(app.state.config)
     # TODO: apply_migration not working
     # run_apply_migration(app.state.config)
+
     async_db_url = get_db_url(app.state.config)
     Database.init(async_db_url, engine_kw=engine_kw)
-    logging.info("Initialized database")
+    logging.info("Initialized database_manager")
 
     async_redis_client = get_redis_client(app.state.config)
     logging.info("Initialized redis")

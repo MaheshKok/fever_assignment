@@ -1,6 +1,6 @@
 class MissingSessionError(Exception):
     """
-    Exception raised for when the user tries to access a database session before it is created.
+    Exception raised for when the user tries to access a database_manager session before it is created.
     """
 
     def __init__(self):
@@ -24,7 +24,7 @@ class SessionNotInitialisedError(Exception):
     def __init__(self):
         msg = """
         Session not initialised! Ensure that DBSessionMiddleware has been initialised before
-        attempting database access.
+        attempting database_manager access.
         """
 
         super().__init__(msg)

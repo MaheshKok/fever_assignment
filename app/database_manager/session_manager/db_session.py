@@ -9,8 +9,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.ext.asyncio import async_sessionmaker
 from sqlalchemy.ext.asyncio import create_async_engine
 
-from app.database.session_manager.exceptions import MissingSessionError
-from app.database.session_manager.exceptions import SessionNotInitialisedError
+from app.database_manager.session_manager.exceptions import MissingSessionError
+from app.database_manager.session_manager.exceptions import SessionNotInitialisedError
 
 
 _async_session_maker: Optional[async_sessionmaker] = None

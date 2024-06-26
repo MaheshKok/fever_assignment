@@ -2,14 +2,12 @@ import asyncio
 import logging
 import pathlib
 
-import aioredis
 import asyncpg
 from alembic import command
 from alembic.config import Config as AlembicConfig
 from sqlalchemy.engine.url import URL
 
 from app.core.config import Config
-from app.utils.constants import REDIS
 
 
 engine_kw = {
@@ -30,16 +28,6 @@ def get_db_url(config: Config) -> URL:
     return URL.create(drivername="postgresql+asyncpg", **config_db)
 
 
-def get_redis_client(config: Config) -> aioredis.StrictRedis:
-    return aioredis.Redis(
-        host=config.data[REDIS]["host"],
-        port=config.data[REDIS]["port"],
-        password=config.data[REDIS]["password"],
-        encoding="utf-8",
-        decode_responses=True,
-    )
-
-
 async def create_database(config: Config):
     user = config.data["db"]["username"]
     password = config.data["db"]["password"]
@@ -57,7 +45,7 @@ async def create_database(config: Config):
         return False
 
     try:
-        # Create a new database
+        # Create a new database_manager
         await conn.execute(f"CREATE DATABASE {database}")
         logging.info(f"Database {database} created")
     except asyncpg.exceptions.DuplicateDatabaseError:
@@ -84,7 +72,7 @@ def apply_migration(config: Config):
         command.upgrade(alembic_cfg, "head")
         logging.info("Database migration applied")
     except Exception as e:
-        logging.error(f"Error while applying database migration: {e}", exc_info=True)
+        logging.error(f"Error while applying database_manager migration: {e}", exc_info=True)
 
 
 def run_apply_migration(config: Config):

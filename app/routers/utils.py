@@ -7,8 +7,8 @@ import aioredis
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.schemas import EventSchema
-from app.pydantic_models.events import EventModel
+from app.database_manager.schemas import EventSchema
+from app.pyd_models.events import EventModel
 
 
 logging.basicConfig(level=logging.INFO)
@@ -39,17 +39,17 @@ async def get_events_from_redis(redis_key: str, redis_client: aioredis.Redis):
 
 async def get_events_from_db(starts_at: datetime, ends_at: datetime, async_session: AsyncSession):
     """
-    Fetches events from the database within a specific start and end datetime.
+    Fetches events from the database_manager within a specific start and end datetime.
 
     Args:
         starts_at (datetime): Start datetime to filter events.
         ends_at (datetime): End datetime to filter events.
-        async_session (AsyncSession): SQLAlchemy async session for database operations.
+        async_session (AsyncSession): SQLAlchemy async session for database_manager operations.
 
     Returns:
-        List[EventSchema]: A list of event records from the database.
+        List[EventSchema]: A list of event records from the database_manager.
     """
-    logging.info("Querying database for events.")
+    logging.info("Querying database_manager for events.")
     try:
         fetch_events_query = await async_session.execute(
             select(EventSchema).filter(
@@ -58,7 +58,7 @@ async def get_events_from_db(starts_at: datetime, ends_at: datetime, async_sessi
             )
         )
         events = fetch_events_query.scalars().all()
-        logging.info(f"Retrieved {len(events)} events from the database.")
+        logging.info(f"Retrieved {len(events)} events from the database_manager.")
         return events
     except Exception as e:
         logging.error(f"Database query failed: {e}")

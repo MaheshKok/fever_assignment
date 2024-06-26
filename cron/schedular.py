@@ -13,11 +13,11 @@ from sqlalchemy import tuple_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_config
-from app.database.base import engine_kw
-from app.database.base import get_db_url
-from app.database.schemas import EventSchema
-from app.database.session_manager.db_session import Database
-from app.pydantic_models.events import PostEventModel
+from app.database_manager.base import engine_kw
+from app.database_manager.base import get_db_url
+from app.database_manager.schemas import EventSchema
+from app.database_manager.session_manager.db_session import Database
+from app.pyd_models.events import PostEventModel
 from app.utils.constants import ConfigFile
 
 
@@ -112,15 +112,15 @@ async def parse_and_store(xml_data):
             new_event_schema = EventSchema(**event_model.model_dump())
             event_schema_list.append(new_event_schema)
             logging.info(
-                f"New event {event_id_pair} added to the session for database insertion."
+                f"New event {event_id_pair} added to the session for database_manager insertion."
             )
 
         if event_schema_list:
             async_session.add_all(event_schema_list)
             await async_session.commit()
-            logging.info("All new events have been committed to the database.")
+            logging.info("All new events have been committed to the database_manager.")
         else:
-            logging.info("No new events to add to the database.")
+            logging.info("No new events to add to the database_manager.")
 
 
 async def main():
