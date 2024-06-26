@@ -17,9 +17,10 @@ This repository is designed for fetching, caching, and serving events data effic
 1. **Clone the repository**
 
     ```bash
-    git clone https://github.com/swolfyguy/MarketplaceEventsAPI.git
-    cd MarketplaceEventsAPI
+    git clone https://github.com/MaheshKok/fever_assignment.git
+    cd fever_assignment
     ```
+
 2. **Create Venv
     ```bash
    python -m venv .venv
