@@ -37,7 +37,9 @@ def upgrade() -> None:
     op.create_index(op.f("ix_events_base_event_id"), "events", ["base_event_id"], unique=False)
     op.create_index(op.f("ix_events_end_date_time"), "events", ["end_date_time"], unique=False)
     op.create_index(op.f("ix_events_event_id"), "events", ["event_id"], unique=False)
-    op.create_index(op.f("ix_events_start_date_time"), "events", ["start_date_time"], unique=False)
+    op.create_index(
+        op.f("ix_events_start_date_time"), "events", ["start_date_time"], unique=False
+    )
     # ### end Alembic commands ###
 
 

@@ -1,14 +1,16 @@
 import asyncio
 import logging
+import pathlib
 
 import aioredis
 import asyncpg
 from alembic import command
-from sqlalchemy.engine.url import URL
 from alembic.config import Config as AlembicConfig
+from sqlalchemy.engine.url import URL
+
 from app.core.config import Config
 from app.utils.constants import REDIS
-import pathlib
+
 
 engine_kw = {
     # "echo": False,  # print all SQL statements
@@ -52,7 +54,7 @@ async def create_database(config: Config):
     try:
         # Connect to the PostgreSQL server
         conn = await asyncpg.connect(user=user, password=password, host=host, port=port)
-        logging.info(f"Connected to the PostgreSQL server successfully")
+        logging.info("Connected to the PostgreSQL server successfully")
 
     except Exception as e:
         logging.error(f"Error while connecting to the PostgreSQL server: {e}")
@@ -60,7 +62,7 @@ async def create_database(config: Config):
 
     try:
         # Create a new database
-        await conn.execute(f'CREATE DATABASE {database}')
+        await conn.execute(f"CREATE DATABASE {database}")
         logging.info(f"Database {database} created")
     except asyncpg.exceptions.DuplicateDatabaseError:
         # Database already exists
@@ -102,4 +104,3 @@ def run_apply_migration(config: Config):
     else:
         # If no event loop is running, use asyncio.run()
         asyncio.run(apply_migration(config))
-
