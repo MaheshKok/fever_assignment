@@ -88,7 +88,6 @@ async def lifespan(app):
         yield
     finally:
         logging.info("Application shutdown")
-        # TODO close database connection
 
         # Close the connection when the application shuts down
         await app.state.async_redis_client.close()

@@ -31,16 +31,12 @@ def get_db_url(config: Config) -> URL:
 
 
 def get_redis_client(config: Config) -> aioredis.StrictRedis:
-    if config.data["ENVIRONMENT"] == "test":
-        return aioredis.Redis(
-            host=config.data[REDIS]["host"],
-            port=config.data[REDIS]["port"],
-            password=config.data[REDIS]["password"],
-            encoding="utf-8",
-            decode_responses=True,
-        )
-    return aioredis.StrictRedis.from_url(
-        config.data[REDIS]["url"], encoding="utf-8", decode_responses=True
+    return aioredis.Redis(
+        host=config.data[REDIS]["host"],
+        port=config.data[REDIS]["port"],
+        password=config.data[REDIS]["password"],
+        encoding="utf-8",
+        decode_responses=True,
     )
 
 

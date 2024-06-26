@@ -1,9 +1,9 @@
 ENVIRONMENT = "production"
 
 [sentry]
+#add your own dsn values
 dsn = "https://ce35"
-environment = "marketplace-events"
-# add your own dsn values
+environment = "fever-events"
 
 
 [db]
