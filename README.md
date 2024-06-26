@@ -9,8 +9,6 @@ This repository contains a high-performance FastAPI application designed for fet
 - create database fever
 - It uses alembic for migration
 - To apply migration ```alembic upgrade head```
-- To run project ```python main.py```
-- TO access API Endpoints - ```https://localhost:8000/docs```
 
 ## Key Features
 
@@ -78,7 +76,10 @@ This repository contains a high-performance FastAPI application designed for fet
         production.toml
     Set as per usage
 
-4. **Run the application**
+4. **Apply Database Migration**
+    ```alembic upgrade head``` from project root
+
+5. **Run the application**
 
     ```bash
     uvicorn app.main:app --reload
