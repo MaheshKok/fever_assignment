@@ -4,6 +4,14 @@
 
 This repository contains a high-performance FastAPI application designed for fetching, caching, and serving event data efficiently. It integrates Redis for caching to enhance response speeds and reduce load on the database backend during high-traffic periods. The application uses SQLAlchemy in its asynchronous mode to interact with a PostgreSQL database, ensuring non-blocking database operations suitable for high concurrency needs.
 
+## Run Project
+- it used postgresql as database, so run postgresql 
+- create database fever
+- It uses alembic for migration
+- To apply migration ```alembic upgrade head```
+- To run project ```python main.py```
+- TO access API Endpoints - ```https://localhost:8000/docs```
+
 ## Key Features
 
 - **Efficient Data Fetching**: Dynamically fetches events based on start and end times through RESTful endpoints.

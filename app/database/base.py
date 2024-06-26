@@ -1,9 +1,14 @@
-import aioredis
-from sqlalchemy.engine.url import URL
+import asyncio
+import logging
 
+import aioredis
+import asyncpg
+from alembic import command
+from sqlalchemy.engine.url import URL
+from alembic.config import Config as AlembicConfig
 from app.core.config import Config
 from app.utils.constants import REDIS
-
+import pathlib
 
 engine_kw = {
     # "echo": False,  # print all SQL statements
@@ -35,3 +40,66 @@ def get_redis_client(config: Config) -> aioredis.StrictRedis:
     return aioredis.StrictRedis.from_url(
         config.data[REDIS]["url"], encoding="utf-8", decode_responses=True
     )
+
+
+async def create_database(config: Config):
+    user = config.data["db"]["username"]
+    password = config.data["db"]["password"]
+    host = config.data["db"]["host"]
+    port = config.data["db"]["port"]
+    database = config.data["db"]["database"]
+
+    try:
+        # Connect to the PostgreSQL server
+        conn = await asyncpg.connect(user=user, password=password, host=host, port=port)
+        logging.info(f"Connected to the PostgreSQL server successfully")
+
+    except Exception as e:
+        logging.error(f"Error while connecting to the PostgreSQL server: {e}")
+        return False
+
+    try:
+        # Create a new database
+        await conn.execute(f'CREATE DATABASE {database}')
+        logging.info(f"Database {database} created")
+    except asyncpg.exceptions.DuplicateDatabaseError:
+        # Database already exists
+        logging.warning(f"Database {database} already exists")
+
+    # Close the connection
+    await conn.close()
+
+
+def apply_migration(config: Config):
+    try:
+        # Get the current file's directory
+        current_dir = pathlib.Path(__file__).parent
+        # Construct the path to the root directory
+        root_dir = current_dir.parent.parent
+
+        alembic_ini_path = f"{root_dir}/alembic.ini"
+        alembic_migrations_path = f"{root_dir}/alembic"
+        alembic_cfg = AlembicConfig(alembic_ini_path)
+        alembic_cfg.set_main_option("script_location", alembic_migrations_path)
+        db_url = str(get_db_url(config))
+        alembic_cfg.set_main_option("sqlalchemy.url", db_url)
+        command.upgrade(alembic_cfg, "head")
+        logging.info("Database migration applied")
+    except Exception as e:
+        logging.error(f"Error while applying database migration: {e}", exc_info=True)
+
+
+def run_apply_migration(config: Config):
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:  # No event loop is running
+        loop = None
+
+    if loop and loop.is_running():
+        # If an event loop is running, create a task
+        task = loop.create_task(apply_migration(config))
+        loop.run_until_complete(task)
+    else:
+        # If no event loop is running, use asyncio.run()
+        asyncio.run(apply_migration(config))
+

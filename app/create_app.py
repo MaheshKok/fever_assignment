@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from contextlib import asynccontextmanager
 
@@ -9,13 +10,12 @@ from starlette.middleware.cors import CORSMiddleware
 # from app.api.healthcheck import healthcheck_router
 from app.core.config import Config
 from app.core.config import get_config
-from app.database.base import engine_kw
+from app.database.base import engine_kw, create_database, apply_migration, run_apply_migration
 from app.database.base import get_db_url
 from app.database.base import get_redis_client
 from app.database.session_manager.db_session import Database
 from app.endpoints.events import events_router
 from app.endpoints.healthcheck import health_router
-
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -70,6 +70,9 @@ def get_app(config_file) -> FastAPI:
 @asynccontextmanager
 async def lifespan(app):
     logging.info("Application startup")
+    await create_database(app.state.config)
+    # TODO: apply_migration not working
+    # run_apply_migration(app.state.config)
     async_db_url = get_db_url(app.state.config)
     Database.init(async_db_url, engine_kw=engine_kw)
     logging.info("Initialized database")

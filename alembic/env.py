@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from logging.config import fileConfig
 
 from alembic import context
@@ -85,7 +86,27 @@ async def run_async_migrations_online() -> None:
     await async_engine.dispose()
 
 
+def run_migrations_online():
+    """Determine if we are in an async context and run the migrations accordingly."""
+    try:
+        loop = asyncio.get_running_loop()
+        if loop.is_running():
+            # If an event loop is running, create a task
+            return asyncio.create_task(run_async_migrations_online())
+    except RuntimeError:
+        pass
+    except Exception as e:
+        logging.error(f"Error while applying database migration: {e}", exc_info=True)
+
+    try:
+        # If no event loop is running, use asyncio.run()
+        asyncio.run(run_async_migrations_online())
+    except Exception as e:
+        logging.error(f"Error while applying database migration: {e}", exc_info=True)
+
+
 if context.is_offline_mode():
     run_migrations_offline()
 else:
-    asyncio.run(run_async_migrations_online())
+    # Ensure this is called within an async context
+    run_migrations_online()

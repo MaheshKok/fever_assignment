@@ -9,7 +9,7 @@ environment = "marketplace-events"
 [db]
 host = "localhost"
 port = "5432"
-database = "test"
+database = "fever"
 username = "postgres"
 password = "postgres"
 
